@@ -1,0 +1,12 @@
+Hello World
+This is file1.txt file.
+This file will be merged with file2.txt.
+Let's see...
+
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+Hello World.
+My name is Jivan Raundal.
+I'm learning Cpp File Handling.
+Shahu is my nickname.
+This is last string, Bye..!
+

@@ -1,0 +1,6 @@
+Hello World.
+This is Jivan Raundal.
+I am New to File Handling Codes.
+Please Ignore If I have made any Mistakes.
+Thank You!
+Have a Nice Day,...& Good Bye!

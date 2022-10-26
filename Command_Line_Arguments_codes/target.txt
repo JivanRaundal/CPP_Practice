@@ -1,0 +1,6 @@
+Hello World
+This is Source file.
+Now I am using this file to copy into another file.
+This file is created by Jivan Raundal.
+Source file Copied to target Successfully...
+THANK YOU!!!

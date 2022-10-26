@@ -1,0 +1,5 @@
+India		New Delhi
+China		Beijing
+England		London
+USA		New York
+Russia		Moscow

@@ -1,0 +1,518 @@
+			SOLVE_2_txt - CODES
+
+// Q 1] WAP to explain static members.
+
+#include<iostream>
+using namespace std;
+
+class Number
+{
+	public:
+		int x;	//non-static datamember
+		static int y;	//static datamember
+		
+		void set()
+		{
+			x = 0;
+			y = 0;
+		}
+		static void change(Number & Temp)	//static member function
+		{
+			Temp.x = Temp.x + 1;
+			y = y + 1;	//y is static, so no obbject required to access it.
+		}
+		void show()
+		{
+			cout<<"\nx = "<<x<<"\ty = "<<y;
+		}
+};
+
+int Number::y = 10;	//static datamembers must be define OR declared outside the class also.
+
+int main()
+{
+	Number T1,T2,T3;
+	
+	cout<<"\nstatic y = "<<Number::y;	//default value of static datamember is 0.
+	
+	T1.set();
+	T2.set();
+	T3.set();
+	
+	Number::change(T1);
+	//T1.change(T1);	//we can also call static member fun using object & .(dot) operator, But no calling object 
+						//will be available inside the static member function.
+	T1.show();
+	Number::change(T2);
+	T2.show();
+	Number::change(T3);
+	T3.show();
+	
+	Number::y = 22;
+	cout<<"\nT1.y = "<<T1.y<<"\tT2.y = "<<T2.y;	
+	T3.y = 88;
+	cout<<"\nNumber::y = "<<Number::y;	//changes made by any object in static datamember will get reflected in all 
+										// objects of class.
+	return 0;
+}
+---------------------------------------------------------------------------------------------------------------------
+
+// Q 2]. WAP to explain function overloading.
+
+#include<iostream>
+using namespace std;
+
+void add(int a,int b)	//---(1)
+{
+	cout<<"\n2 int addition = "<<a+b;
+}
+
+void add(double a,double b,double c)	//---(2)
+{
+	cout<<"\n3 double addition = "<<a+b+c;
+}
+
+void add(int a,int b,int c)		//---(3)
+{
+	cout<<"\n3 int addition = "<<a+b+c;
+}
+
+void add(float a,float b)	//---(4)
+{
+	cout<<"\n2 float addition = "<<a+b;
+}
+
+int main()
+{
+	add(4,3,2);			//fun 3 will called
+	add(3.4,6.7,3.3);	//fun 2 will called
+	add(5,4);			//fun 1 will called
+	//add(3.4,6.7);	 	//will find 2 matches i.e. fun 1 & fun 4 & will generate Ambuiguity Error.
+						// Solution - Explicit Typecasting to required datatype
+	add((float)3.4,(float)6.7);	//fun 4 will called
+	add((int)3.4,(int)6.7);		//fun 1 will called
+
+	return 0;
+}
+----------------------------------------------------------------------------------------------------------------
+
+// Q 3]. WAP to explain constatnt member function.
+// Note - calling objects becomes constatnt object in constant member function. So, datamembers of calling
+//        object cannot be changed .
+
+#include<iostream>
+using namespace std;
+
+class Num
+{
+	public:
+		int x,y;
+		
+		void set()
+		{
+			x = 5;
+			y = 0;
+		}
+		
+		void change(Num & Temp) const		//constant member function
+		{
+			// x = x + 1;	//error, cannot change bcz calling object becomes constant
+			Temp.x = x + 3;
+			Temp.y = y + 5;
+		}
+		
+		void show()
+		{
+			cout<<"\nx = "<<x<<"\ty = "<<y;
+		}
+};
+
+int main()
+{
+	Num obj,var;
+	var.set();
+	var.show();
+	var.change(obj);
+	obj.show();
+	
+	return 0;
+}
+------------------------------------------------------------------------------------------------
+
+// Q 4]. WAP to explain nested class. (perform trial & error with different access-specifier)
+
+// Note - If you want to reach Inner class, you have to go through Outer class.
+
+#include<iostream>
+using namespace std;
+
+/*
+class Outer
+{
+	public:
+		int x;
+		class Inner
+		{
+			public:
+				int y;
+				void show()
+				{
+					cout<<"\nIn Inner show(), y = "<<y;
+				}
+		};
+		
+		Inner var;
+};
+
+int main()
+{
+	Outer obj;
+	obj.x = 10;
+	obj.var.y = 20;
+	cout<<"\nx = "<<obj.x;
+	obj.var.show();
+	
+	//We can also create object of Inner class In Independent function
+	Outer::Inner Temp;	//Temp is object of class Inner
+	Temp.y = 7;
+	Temp.show();
+	
+	return 0;
+}
+*/
+
+// Note - If we define class Inner under private access-specifier, then we cannot create it's object in Independent
+//        function. But we can creat it's object as a datamember of class Outer.
+
+class Outer
+{
+	private:
+		class Inner
+		{
+			public:
+				int y;
+				void show()
+				{
+					cout<<"\nIn Inner show(), y = "<<y;
+				}
+		};
+		
+	public:
+		int x;
+		Inner var;	//we can create object of var here. But not inside independent function
+};
+
+int main()
+{
+	Outer obj;
+	obj.x = 10;
+	obj.var.y = 20;	//No error, bcz var is public & it's y is also public
+	cout<<"\nx = "<<obj.x;
+	obj.var.show();
+	
+	//Outer::Inner Temp;	//Error - because Inner class is private
+	
+	return 0;
+}
+-----------------------------------------------------------------------------------------
+
+// Q 5]. WAP to explain Local Classes.
+// Note - class defined inside the function is called as local class for that function.
+
+#include<iostream>
+using namespace std;
+
+void disp();
+
+int main()
+{
+	class Inner
+	{
+		public:
+			int x,y;
+			void show()
+			{
+				cout<<"\nIn Inner show()";
+				cout<<"\nx = "<<x<<"\ty = "<<y;
+			}
+			// Note - we cannot define show() function outside the class by any means.
+	};
+	
+	Inner obj;	//we can create object of local class in main() only.
+	obj.x = 10;
+	obj.y = 20;
+	obj.show();
+}
+
+void disp()
+{
+	//Inner var;	//error, bcz Inner class is local class of main() function.
+}
+-------------------------------------------------------------------------------------
+
+// Q 6]. For class Num create 2 runtime objects. scan values of x & y. print them.
+//       All in main(). Do not add any member function.
+
+#include<iostream>
+using namespace std;
+
+class Num
+{
+	public:
+		int x,y;
+};
+
+int main()
+{
+	Num *p, *q;	//pointer to object
+	//creating runtime objects
+	p = new Num();
+	q = new Num();
+	
+	cout<<"\n1st object : ";
+	cout<<"\nEnter x & y : ";
+	cin>>p->x>>p->y;
+	cout<<"\nx = "<<p->x<<"\ty = "<<p->y;
+	
+	cout<<"\n\n2nd object : ";
+	cout<<"\nEnter x & y : ";
+	cin>>q->x>>q->y;
+	cout<<"\nx = "<<q->x<<"\ty = "<<q->y;
+	
+	delete p;
+	delete q;
+	return 0;
+}
+---------------------------------------------------------------------
+
+// Q 7]. scan details of T1 & T2 in main(). print them in main().
+
+#include<iostream>
+using namespace std;
+
+class Stud
+{
+	public:
+		char name[30];
+		int age;
+};
+
+int main()
+{
+	Stud T1,T2;
+	
+	cout<<"\nEnter details for 1st student : ";
+	cout<<"\nEnter Name : ";
+	cin.getline(T1.name,28,'\n');
+	cout<<"\nEnter Age : ";
+	cin>>T1.age;
+	cin.ignore(1);
+	
+	cout<<"\nEnter details for 2nd student : ";
+	cout<<"\nEnter Name : ";
+	cin.getline(T2.name,28,'\n');
+	cout<<"\nEnter Age : ";
+	cin>>T2.age;	
+	
+	cout<<"\n\nPrinting details of studets\n";
+	cout<<"\n1) Name = "<<T1.name<<"\tAge = "<<T1.age;
+	cout<<"\n2) Name = "<<T2.name<<"\tAge = "<<T2.age;
+	
+	return 0;
+}
+----------------------------------------------------------------------
+
+// Q 8]. Scan details of T1 & T2 in main(). print them in main().
+//		 Do not define any member function.
+
+#include<iostream>
+using namespace std;
+
+class Stud
+{
+	public:
+		char *name;
+		int age;
+};
+
+int main()
+{
+	Stud T1,T2;
+	
+	//allocating runtime memory for name
+	T1.name = new char[30];
+	T2.name = new char[30];
+	
+	cout<<"\nEnter details for 1st student : ";
+	cout<<"\nEnter Name : ";
+	cin.getline(T1.name,28,'\n');
+	cout<<"\nEnter Age : ";
+	cin>>T1.age;
+	cin.ignore(1);
+	
+	cout<<"\nEnter details for 2nd student : ";
+	cout<<"\nEnter Name : ";
+	cin.getline(T2.name,28,'\n');
+	cout<<"\nEnter Age : ";
+	cin>>T2.age;	
+	
+	cout<<"\n\nPrinting details of studets\n";
+	cout<<"\n1) Name = "<<T1.name<<"\tAge = "<<T1.age;
+	cout<<"\n2) Name = "<<T2.name<<"\tAge = "<<T2.age;
+	
+	delete[] T1.name;
+	delete[] T2.name;
+	return 0;
+}
+--------------------------------------------------------------------------
+
+// Q 9]. Scan details of T1 & T2. print them.
+
+#include<iostream>
+using namespace std;
+
+class Stud
+{
+	private:
+		char *name;
+		int age;
+		
+	public:
+		void scan()
+		{
+			name = new char[30];
+			cout<<"\nEnter Name : ";
+			cin.getline(name,28,'\n');
+			cout<<"\nEnter Age : ";
+			cin>>age;
+			cin.ignore(1);
+		}
+		void print()
+		{
+			cout<<"\nName = "<<name<<"\tAge = "<<age;
+		}
+		void freememory()
+		{
+			delete[] name;
+		}
+};
+
+int main()
+{
+	Stud T1,T2;
+	
+	cout<<"\nEnter details of 1st student : ";
+	T1.scan();
+	cout<<"\nEnter details of 2nd student : ";
+	T2.scan();
+	
+	cout<<"\nPrinting Details : ";
+	T1.print();
+	T2.print();
+	
+	T1.freememory();
+	T2.freememory();
+	return 0;
+}
+-----------------------------------------------------------------------
+
+// Q 10]. Scan details of T1 & T2 and print them.
+
+#include<iostream>
+using namespace std;
+
+class Stud
+{
+	private:
+		char name[30];
+		int *age;
+		
+	public:
+		void scan()
+		{
+			cout<<"\nEnter Name : ";
+			cin.getline(name,28,'\n');
+			
+			//allocating runtime memory to age
+			age = new int();
+			cout<<"\nEnter Age : ";
+			cin>>*age;
+			cin.ignore(1);
+		}
+		void print()
+		{
+			cout<<"\nName = "<<name<<"\tAge = "<<*age;
+		}
+		void freememory()
+		{
+			delete age;
+		}
+};
+
+int main()
+{
+	Stud T1,T2;
+	
+	cout<<"\nEnter details of 1st student : ";
+	T1.scan();
+	cout<<"\nEnter details of 2nd student : ";
+	T2.scan();
+	
+	cout<<"\nPrinting Details : ";
+	T1.print();
+	T2.print();
+	
+	T1.freememory();
+	T2.freememory();
+	return 0;
+}
+-------------------------------------------------------------------------
+
+// Q 11]. WAP to explain constructor overloading.
+
+#include<iostream>
+using namespace std;
+
+class Num
+{
+	public:
+		int x,y;
+		
+		Num()	//default constructor
+		{
+			cout<<"\nIn default constructor.";
+			x = 0;
+			y = 0; 
+		}
+		Num(int a,int b)	//2 parameterized constructor
+		{
+			cout<<"\nIn 2 parameterized constructor.";
+			x = a;
+			y = b;
+		}
+		Num(Num & T)	//copy constructor
+		{
+			cout<<"\nIn copy constructor.";
+			x = T.x;
+			y = T.y;
+		}
+		void show()
+		{
+			cout<<"\nx = "<<x<<"\ty = "<<y;
+		}
+};
+
+int main()
+{
+	Num obj;	//default constructor will be called
+	obj.show();
+	
+	Num var(3,5);	//2 parameterized constructor will be called
+	var.show();
+	
+	Num Temp(var);	//copy constructor will be called
+	Temp.show();
+	
+	return 0;
+}
+----------------------------------------------------------------------------

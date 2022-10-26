@@ -1,0 +1,9 @@
+Hello Friends
+This is file1.txt.
+This file will be merged with file2.txt.
+continue in file2.txt....
+Welcome to file2.txt
+This file is mergering with file1.txt.
+Wailt for a minute.
+Finished.
+GOOD BYE!!!
